@@ -44,7 +44,7 @@ public abstract class AbstractSheetDefinition implements SheetDefinition, Resolv
         return workbook;
     }
 
-    private RowDefinition findOrCreateRow(int zeroBasedRowNumber) {
+    protected RowDefinition findOrCreateRow(int zeroBasedRowNumber) {
         AbstractRowDefinition row = rows.get(zeroBasedRowNumber + 1);
 
         if (row != null) {
