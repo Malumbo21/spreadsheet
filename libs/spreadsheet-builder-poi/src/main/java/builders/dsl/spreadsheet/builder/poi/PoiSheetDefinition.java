@@ -18,6 +18,7 @@
 package builders.dsl.spreadsheet.builder.poi;
 
 import builders.dsl.spreadsheet.builder.api.PageDefinition;
+import builders.dsl.spreadsheet.builder.api.RowDefinition;
 import builders.dsl.spreadsheet.builder.api.SheetDefinition;
 import builders.dsl.spreadsheet.impl.AbstractSheetDefinition;
 import org.apache.poi.ss.usermodel.Row;
@@ -34,10 +35,20 @@ class PoiSheetDefinition extends AbstractSheetDefinition implements SheetDefinit
     public static final int MAX_COLUMN_WIDTH = 255 * 256;
 
     private final Sheet sheet;
+    private final boolean streaming;
 
     PoiSheetDefinition(PoiWorkbookDefinition workbook, Sheet sheet) {
         super(workbook);
         this.sheet = sheet;
+        this.streaming = sheet instanceof SXSSFSheet;
+    }
+
+    @Override
+    protected RowDefinition findOrCreateRow(int zeroBasedRowNumber) {
+        if (streaming) {
+            return createRow(zeroBasedRowNumber);
+        }
+        return super.findOrCreateRow(zeroBasedRowNumber);
     }
 
     @Override protected PoiRowDefinition createRow(int zeroBasedRowNumber) {
